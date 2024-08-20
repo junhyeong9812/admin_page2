@@ -1,6 +1,6 @@
 import { GitHubBanner, Refine, WelcomePage } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
-import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
+// import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
 import { useNotificationProvider } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
@@ -37,13 +37,13 @@ function App() {
             }}
           >
             <Routes>
-              <Route index element={<WelcomePage />} />
-              {/* <Route index element={<Home />} /> */}
+              {/* <Route index element={<WelcomePage />} /> */}
+              <Route index element={<Home />} />
               <Route path="/Login" element={<Login />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/register" element={<Register />} />
             </Routes>
-            <RefineKbar />
+
             <UnsavedChangesNotifier />
             <DocumentTitleHandler />
           </Refine>
