@@ -12,12 +12,14 @@ import { fetchWrapper } from "./fetch-wrapper";
 // 실시간 GraphQL 구독을 위한 웹소켓 클라이언트를 생성하는 createClient 함수를 임포트합니다.
 import { createClient } from "graphql-ws";
 
-// API 요청을 보낼 백엔드 서버의 URL을 정의합니다.
-// 이 URL은 GraphQL API가 호스팅된 서버를 가리킵니다.
-export const API_URL = "https://api.crm.refine.dev"; // GraphQL API 서버의 HTTP URL
-
 // API의 기본 URL을 정의합니다. 다른 요청에서 참조할 수 있습니다.
 export const API_BASE_URL = "https://api.crm.refine.dev"; // 백엔드 API의 기본 URL
+
+// API 요청을 보낼 백엔드 서버의 URL을 정의합니다.
+// 이 URL은 GraphQL API가 호스팅된 서버를 가리킵니다.
+export const API_URL = `${API_BASE_URL}/graphql`;
+//이경로가 실제 경로가 됨
+("https://api.crm.refine.dev"); // GraphQL API 서버의 HTTP URL
 
 // WebSocket을 통한 GraphQL 구독을 위한 URL을 정의합니다.
 export const WS_URL = "wss://api.crm.refine.dev/graphql"; // 실시간 WebSocket URL
