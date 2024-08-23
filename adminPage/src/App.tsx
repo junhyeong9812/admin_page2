@@ -1,4 +1,9 @@
-import { GitHubBanner, Refine, WelcomePage } from "@refinedev/core";
+import {
+  Authenticated,
+  GitHubBanner,
+  Refine,
+  WelcomePage,
+} from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 // import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
@@ -9,12 +14,14 @@ import { authProvider, dataProvider, liveProvider } from "./providers";
 import { Home, ForgotPassword, Login, Register } from "./pages";
 
 import routerBindings, {
+  CatchAllNavigate,
   DocumentTitleHandler,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router-v6";
 import { App as AntdApp } from "antd";
 import { createClient } from "graphql-ws";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import Layout from "./components/layout";
 
 function App() {
   return (
@@ -38,10 +45,24 @@ function App() {
           >
             <Routes>
               {/* <Route index element={<WelcomePage />} /> */}
-              <Route index element={<Home />} />
+
               <Route path="/Login" element={<Login />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/register" element={<Register />} />
+              <Route
+                element={
+                  <Authenticated
+                    key="authenticated-layout"
+                    fallback={<CatchAllNavigate to="/login" />}
+                  >
+                    <Layout>
+                      <Outlet />
+                    </Layout>
+                  </Authenticated>
+                }
+              >
+                <Route index element={<Home />} />
+              </Route>
             </Routes>
 
             <UnsavedChangesNotifier />
@@ -95,3 +116,40 @@ export default App;
 // Routes: 여러 Route를 감싸서 라우팅 구조를 정의합니다.
 // 요약
 // 이 코드 구조에서는 RefineDev의 다양한 기능을 사용하여 모던한 CRUD 애플리케이션을 쉽게 개발할 수 있습니다. 각 컴포넌트는 특정한 역할을 담당하며, 이러한 컴포넌트를 결합하여 데이터 제공, 인증, 라우팅, 상태 관리, 알림, 개발 도구 등 다양한 기능을 통합적으로 관리할 수 있습니다. RefineDev를 사용하면 복잡한 애플리케이션 개발이 훨씬 간편해지고, 유지보수도 수월해집니다.
+
+{
+  /* <Route
+
+element={
+  <Authenticated
+    key="authenticated-layout"
+    fallback={<CatchAllNavigate to="/login" />}
+  />
+}
+>
+<Layout>
+  <Outlet />
+</Layout>
+</Route>
+위 구조를 통해 아래와 같은 이점을 가질 수 있다.
+<Route> 내부에 <Layout> 컴포넌트를 넣고, 그 위에 Authenticated 컴포넌트를 사용하여 라우트를 구성하면 다음과 같은 효과를 기대할 수 있습니다:
+
+1. 인증된 사용자만 접근 가능:
+Authenticated 컴포넌트는 사용자 인증 여부를 확인합니다. 만약 사용자가 인증되지 않았다면, fallback 속성에 지정된 컴포넌트(CatchAllNavigate to="/login")가 실행되어 사용자를 로그인 페이지로 리다이렉트합니다.
+이로 인해, <Layout> 내의 모든 경로에 대해 인증된 사용자만 접근할 수 있습니다. 이는 민감한 데이터를 보호하고, 인증된 사용자만 특정 페이지나 기능에 접근할 수 있도록 하는 중요한 보안 메커니즘입니다.
+2. 일관된 레이아웃 제공:
+<Layout> 컴포넌트를 통해 인증된 사용자가 접근할 수 있는 모든 페이지에 대해 일관된 레이아웃을 제공합니다. 예를 들어, 공통된 헤더, 사이드바, 푸터 등을 포함할 수 있습니다.
+모든 자식 경로(Outlet으로 표현된 부분)는 동일한 레이아웃을 공유하게 됩니다. 이렇게 하면 애플리케이션의 페이지 구조가 일관되고, 사용자 경험이 향상됩니다.
+3. 라우팅 구조 관리:
+이 구조는 리액트 라우터의 Outlet을 사용하여 중첩된 라우트를 관리할 수 있게 해줍니다. 즉, <Layout> 내에 여러 자식 라우트를 정의할 수 있으며, 이 자식 라우트들은 모두 동일한 레이아웃을 사용하게 됩니다.
+예를 들어, /dashboard, /profile 등의 경로를 <Layout> 내부에서 정의하면, 이 경로들은 모두 동일한 레이아웃 내에서 렌더링되며, 각 페이지 간의 전환이 부드럽고 일관된 UI를 유지할 수 있습니다.
+4. 유연한 페이지 구성:
+<Layout> 컴포넌트는 쉽게 확장 가능하며, 사용자가 페이지를 방문할 때마다 기본적으로 적용되는 공통 요소를 설정할 수 있습니다. 예를 들어, 공통적으로 필요한 로직(예: 데이터 페칭, 알림 처리, 접근 권한 확인 등)을 레이아웃 컴포넌트에 포함시킬 수 있습니다.
+5. 페이지 보호 및 가시성 관리:
+인증이 필요하지 않은 페이지는 <Layout> 밖에서 정의할 수 있고, 인증이 필요한 페이지는 이 <Route> 구조 안에 두어 관리할 수 있습니다. 이렇게 하면 인증이 필요한 페이지와 그렇지 않은 페이지를 명확히 구분하여 관리할 수 있습니다.
+요약:
+보안성 강화: 인증된 사용자만 특정 레이아웃 및 그에 속한 페이지에 접근할 수 있습니다.
+일관된 사용자 경험: 공통된 레이아웃을 적용하여 애플리케이션 전반에 걸쳐 일관된 UI를 제공할 수 있습니다.
+중첩 라우트 지원: 다양한 페이지를 구조화하여 중첩 라우트와 관련된 로직을 깔끔하게 관리할 수 있습니다.
+이러한 구조를 사용하면, 인증이 필요한 모든 페이지에서 일관된 사용자 경험을 제공하면서, 동시에 보안도 강화할 수 있습니다. */
+}
