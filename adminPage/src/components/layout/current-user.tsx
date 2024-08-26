@@ -32,7 +32,12 @@ const CurrentUser = () => {
         {/* Popover의 트리거 요소로 사용되는 텍스트입니다. 
             클릭 가능한 컴포넌트 요소를 넣으면 된다
             여기서는 사용자 아이콘이 들어간다. */}
-        <CustomAvatar />
+        <CustomAvatar
+          name={user?.name}
+          src={user?.avatarUrl}
+          size="default"
+          style={{ cursor: "pointer" }}
+        />
       </Popover>
     </>
   );
