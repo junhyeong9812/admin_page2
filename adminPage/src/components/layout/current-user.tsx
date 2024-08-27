@@ -4,17 +4,57 @@
 import { Popover, Button } from "antd";
 import CustomAvatar from "../custom-avatar";
 import { useGetIdentity } from "@refinedev/core";
-
+import * as Icons from "@ant-design/icons";
+const { SettingOutlined } = Icons;
 import type { User } from "@/graphql/schema.types";
+import { Text } from "../text";
+import { useState } from "react";
+import { AccountSettings } from "./account-setting";
 //위의 @경로 설정을 vite.config.ts에서 tsconfigPath를 임포트 해줘야한다.
 //
 
 // CurrentUser 컴포넌트를 정의합니다.
 // 이 컴포넌트는 Popover를 사용하여 클릭 시 오버레이를 표시합니다.
 const CurrentUser = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const { data: user } = useGetIdentity<User>();
   //auth.ts에 getIdentity함수를 통해 가져온다.
-
+  const content = (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <Text strong style={{ padding: "12px 20px" }}>
+        {user?.name}
+      </Text>
+      <div
+        style={{
+          borderTop: "1px solid #d9d9d9",
+          padding: "4px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "4px",
+        }}
+      >
+        <Button
+          style={{ textAlign: "left" }}
+          icon={
+            <SettingOutlined
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            />
+          }
+          type="text"
+          block
+          onClick={() => setIsOpen(true)}
+        >
+          Account Settings
+        </Button>
+      </div>
+    </div>
+  );
   return (
     <>
       {/* Popover 컴포넌트를 사용하여 트리거 요소를 생성합니다. 
@@ -28,6 +68,7 @@ const CurrentUser = () => {
         trigger="click"
         overlayInnerStyle={{ padding: 0 }}
         overlayStyle={{ zIndex: 999 }}
+        content={content}
       >
         {/* Popover의 트리거 요소로 사용되는 텍스트입니다. 
             클릭 가능한 컴포넌트 요소를 넣으면 된다
@@ -39,6 +80,14 @@ const CurrentUser = () => {
           style={{ cursor: "pointer" }}
         />
       </Popover>
+      {user && (
+        <AccountSettings
+          opened={isOpen}
+          setOpened={setIsOpen}
+          userId={user.id}
+        />
+      )}
+      {/* 유저정보창 */}
     </>
   );
 };

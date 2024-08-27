@@ -7,3 +7,5 @@ export const getNameInitials = (name: string, count = 2) => {
   const filtered = initials.replace(/[^a-zA-Z]/g, ""); // `filtered` 변수에, `initials` 문자열에서 알파벳(a-z, A-Z) 이외의 문자를 모두 제거한 문자열을 저장
   return filtered.slice(0, count).toUpperCase(); // `filtered` 문자열에서 앞에서부터 `count`만큼의 문자를 잘라내어 대문자로 변환한 후 반환
 };
+
+//
