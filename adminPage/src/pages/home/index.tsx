@@ -1,4 +1,5 @@
 // rafce단축키로 생성
+import { DealsChart, UpcomingEvents } from "@/components";
 import { Col, Row } from "antd";
 import React from "react";
 
@@ -19,7 +20,7 @@ export const Home = () => {
             height: "460px",
           }}
         >
-          CalendarUpcomingEvents
+          <UpcomingEvents />
         </Col>
         <Col
           xs={24}
@@ -29,7 +30,7 @@ export const Home = () => {
             height: "460px",
           }}
         >
-          CalendarUpcomingEvents
+          <DealsChart />
         </Col>
       </Row>
     </div>
