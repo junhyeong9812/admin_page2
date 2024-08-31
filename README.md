@@ -12,3 +12,7 @@ npm create refine-app을 통해 진행
 <br>
 ![image](https://github.com/user-attachments/assets/ca24f48f-139d-4602-aa88-6a5e06a1240b)
 기본적인 /경로 접근 시 로그인으로 접근하도록 설계
+<br>
+![image](https://github.com/user-attachments/assets/a15b0579-9053-48ff-a7ea-46bfc7b8a154)
+<br>
+대시보드
